@@ -1,0 +1,278 @@
+# Script to create a SQLite databse and tables
+
+from sqlite3 import connect
+
+db_name = 'DB_JoRo_PRO' #provide DB name
+
+conn = connect(db_name) # connect/create (if does not exist)
+curs = conn.cursor()
+
+#################################################################################
+# PDBe data
+#################################################################################
+
+# PDBe_Pfam_info table
+curs.execute('''CREATE TABLE IF NOT EXISTS PDBe_Pfam_info (
+            Pfam_info_ID INTEGER PRIMARY KEY NOT NULL,
+            Pfam char(50) NOT NULL,
+            PDB char(4))''')
+
+# PDBe_PDB_chain_info table
+curs.execute('''CREATE TABLE IF NOT EXISTS PDBe_PDB_chain_info (
+            PDB_chain_info_ID INTEGER PRIMARY KEY NOT NULL,
+            PDB char(4) NOT NULL,
+            chain_id char(2))''')
+
+# PDBe_PDB_ligand_info table
+curs.execute('''CREATE TABLE IF NOT EXISTS PDBe_PDB_ligand_info (
+            PDB_ligand_info_ID INTEGER PRIMARY KEY NOT NULL,
+            PDB char(4) NOT NULL,
+            chain_id char(2),
+            chem_comp_name text,
+            chem_comp_id char(10),
+            struct_asym_id char(4))''')
+
+# PDBe_ligand_summary table
+curs.execute('''CREATE TABLE IF NOT EXISTS PDBe_ligand_summary (
+            ligand_summary_ID INTEGER PRIMARY KEY NOT NULL,
+            chem_comp_id char(10),
+            inchi_key text,
+            weight real(10),
+            formal_charge char(3),
+            chembl_id text,
+            formula text,
+            inchi text)''')
+
+# PDBe_PDB_UniProt table
+curs.execute('''CREATE TABLE IF NOT EXISTS PDBe_PDB_UniProt (
+             PDB_UniProt_ID INTEGER PRIMARY KEY NOT NULL,
+             PDB char(4),
+             UniProt char(15))''')
+
+
+#################################################################################
+# ZoomVar data
+#################################################################################
+
+### Protein ###
+
+# ZV_protein_clinvar table
+curs.execute('''CREATE TABLE IF NOT EXISTS ZV_protein_clinvar (
+             clinvar_protein_ID INTEGER PRIMARY KEY NOT NULL,
+             UniProt char(10),
+             length integer(10),
+             snps integer(4),
+             cdf real(30),
+             pval real(30),
+             qval real(30))''')
+
+# ZV_protein_cosmic table
+curs.execute('''CREATE TABLE IF NOT EXISTS ZV_protein_cosmic (
+            cosmic_protein_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt char(10),
+            length integer(10),
+            snps integer(4),
+            cdf real(30),
+            pval real(30),
+            qval real(30))''')
+             
+# ZV_gnomad_common_protein
+curs.execute('''CREATE TABLE IF NOT EXISTS ZV_protein_gnomad_common (
+            gnomad_common_protein_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt char(10),
+            length integer(10),
+            snps integer(4),
+            cdf real(30),
+            pval real(30),
+            qval real(30))''')
+             
+# ZV_gnomad_rare_protein
+curs.execute('''CREATE TABLE IF NOT EXISTS ZV_protein_gnomad_rare (
+            gnomad_rare_protein_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt char(10),
+            length integer(10),
+            snps integer(4),
+            cdf real(30),
+            pval real(30),
+            qval real(30))''')
+
+
+### Region ###
+
+# ZV_region_clinvar
+curs.execute('''CREATE TABLE IF NOT EXISTS ZV_region_clinvar (
+            clinvar_region_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt char(10),
+            len_interact integer(10),
+            len_surf integer(10),
+            len_core integer(10),
+            num_snp_interact integer(10), 
+            num_snp_surf integer(10),
+            num_snp_core integer(10),
+            enrich_interact real(30),
+            enrich_surf real(30),
+            enrich_core real(30),
+            cdf_interact real(30),
+            cdf_surf real(30),
+            cdf_core real(30),
+            pval_interact real(30),
+            pval_surf real(30),
+            pval_core real(30),
+            qval_interact real(30),
+            qval_surf real(30),
+            qval_core real(30))''')
+        
+# ZV_region_cosmic table
+curs.execute('''CREATE TABLE IF NOT EXISTS ZV_region_cosmic (
+            cosmic_region_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt char(10),
+            len_interact integer(10),
+            len_surf integer(10),
+            len_core integer(10),
+            num_snp_interact integer(10), 
+            num_snp_surf integer(10),
+            num_snp_core integer(10),
+            enrich_interact real(30),
+            enrich_surf real(30),
+            enrich_core real(30),
+            cdf_interact real(30),
+            cdf_surf real(30),
+            cdf_core real(30),
+            pval_interact real(30),
+            pval_surf real(30),
+            pval_core real(30),
+            qval_interact real(30),
+            qval_surf real(30),
+            qval_core real(30))''')
+
+# ZV_region_gnomad_common table
+curs.execute('''CREATE TABLE IF NOT EXISTS ZV_region_gnomad_common (
+            clinvar_region_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt char(10),
+            len_interact integer(10),
+            len_surf integer(10),
+            len_core integer(10),
+            num_snp_interact integer(10), 
+            num_snp_surf integer(10),
+            num_snp_core integer(10),
+            enrich_interact real(30),
+            enrich_surf real(30),
+            enrich_core real(30),
+            cdf_interact real(30),
+            cdf_surf real(30),
+            cdf_core real(30),
+            pval_interact real(30),
+            pval_surf real(30),
+            pval_core real(30),
+            qval_interact real(30),
+            qval_surf real(30),
+            qval_core real(30))''')
+
+# ZV_region_gnomad_rare table
+curs.execute('''CREATE TABLE IF NOT EXISTS ZV_region_gnomad_rare (
+            clinvar_region_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt char(10),
+            len_interact integer(10),
+            len_surf integer(10),
+            len_core integer(10),
+            num_snp_interact integer(10), 
+            num_snp_surf integer(10),
+            num_snp_core integer(10),
+            enrich_interact real(30),
+            enrich_surf real(30),
+            enrich_core real(30),
+            cdf_interact real(30),
+            cdf_surf real(30),
+            cdf_core real(30),
+            pval_interact real(30),
+            pval_surf real(30),
+            pval_core real(30),
+            qval_interact real(30),
+            qval_surf real(30),
+            qval_core real(30))''')
+
+
+#################################################################################
+# UniPPIN
+#################################################################################
+
+# UP_UniPPIN_ACC
+curs.execute('''CREATE TABLE IF NOT EXISTS UP_UniPPIN_ACC (
+            UniPPIN_ACC_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt_1 char(10),
+            UniProt_2 char(10))''')
+
+
+#################################################################################
+# UNIPPIN2018 tables
+#################################################################################
+
+# UP_BioGRID_noSelfLoop table
+curs.execute('''CREATE TABLE IF NOT EXISTS UP_BioGRID_noSelfLoop (
+            BioGRID_noSelfLoop_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt_1 char(10),
+            UniProt_2 char(10))''')
+
+# UP_BioPlex_noSelfLoop
+curs.execute('''CREATE TABLE IF NOT EXISTS UP_BioPlex_noSelfLoop (
+            BioPlex_noSelfLoop_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt_1 char(10),
+            UniProt_2 char(10))''')
+
+# UP_BPMS_noSelfLoop
+curs.execute('''CREATE TABLE IF NOT EXISTS UP_BPMS_noSelfLoop (
+            BPMS_noSelfLoop_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt_1 char(10),
+            UniProt_2 char(10))''')
+
+# UP_DIPPPI_noSelfLoop
+curs.execute('''CREATE TABLE IF NOT EXISTS UP_DIPPPI_noSelfLoop (
+            DIPPPI_noSelfLoop_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt_1 char(10),
+            UniProt_2 char(10))''')
+
+# UP_HeinMS_noSelfLoop
+curs.execute('''CREATE TABLE IF NOT EXISTS UP_HeinMS_noSelfLoop (
+            HeinMS_noSelfLoop_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt_1 char(10),
+            UniProt_2 char(10))''')
+
+# UP_HPRD_noSelfLoop
+curs.execute('''CREATE TABLE IF NOT EXISTS UP_HPRD_noSelfLoop (
+            HPRD_noSelfLoop_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt_1 char(10),
+            UniProt_2 char(10))''')
+
+# UP_IntAct_noSelfLoop
+curs.execute('''CREATE TABLE IF NOT EXISTS UP_IntAct_noSelfLoop (
+            IntAct_noSelfLoop_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt_1 char(10),
+            UniProt_2 char(10))''')
+
+# UP_Metazoa_noSelfLoop
+curs.execute('''CREATE TABLE IF NOT EXISTS UP_Metazoa_noSelfLoop (
+            Metazoa_noSelfLoop_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt_1 char(10),
+            UniProt_2 char(10))''')
+
+# UP_String_noSelfLoop
+curs.execute('''CREATE TABLE IF NOT EXISTS UP_String_noSelfLoop (
+            String_noSelfLoop_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt_1 char(10),
+            UniProt_2 char(10))''')
+
+# UP_UniPPIN_ACC_noSelfLoop
+curs.execute('''CREATE TABLE IF NOT EXISTS UP_UniPPIN_ACC_noSelfLoop (
+            UniPPIN_ACC_noSelfLoop_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt_1 char(10),
+            UniProt_2 char(10))''')
+
+# UP_Y2H_noSelfLoop
+curs.execute('''CREATE TABLE IF NOT EXISTS UP_Y2H_noSelfLoop (
+            Y2H_noSelfLoop_ID INTEGER PRIMARY KEY NOT NULL,
+            UniProt_1 char(10),
+            UniProt_2 char(10))''')
+
+##curs.execute ('DROP TABLE PDEBe_PDB_UniProt')
+
+conn.commit()
