@@ -1,0 +1,20 @@
+############################################################################
+# Populating database with the content of UniPPN_ACC_noSelfLoop file
+############################################################################
+
+from sqlite3 import connect
+
+DB_name = 'DB_JoRo_PRO'
+file_name = 'UniPPIN_ACC_noSelfLoop.txt'
+
+############################################################################
+conn = connect(DB_name)
+curs = conn.cursor()
+
+file = open(file_name)
+rows = [line.rstrip().split(',') for line in file]
+for rec in rows:
+    curs.execute('INSERT INTO UP_UniPPIN_ACC (uniprot_1, uniprot_2) VALUES (?,?)', rec)
+
+conn.commit()
+
