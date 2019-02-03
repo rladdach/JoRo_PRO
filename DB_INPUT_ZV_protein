@@ -1,0 +1,44 @@
+############################################################################
+# Populating database with the content of ZoomVar Protein
+# http://fraternalilab.kcl.ac.uk/ZoomVar/static/downloads/proteins.tar.gz
+############################################################################
+
+from sqlite3 import connect
+
+DB_name = 'DB_JoRo_PRO'
+
+############################################################################
+conn = connect(DB_name)
+curs = conn.cursor()
+
+file = open('clinvar_protein.csv')
+rows = [[line.rstrip().split(',')[0][1:-1]] + line.rstrip().split(',')[3:] for line in file]
+if rows[0][0] == 'protein':
+    del rows[0]
+for rec in rows:
+    curs.execute('INSERT INTO ZV_protein_clinvar (UniProt, length, snps, cdf, pval, qval) VALUES (?,?,?,?,?,?)', rec)
+
+file = open('cosmic_protein.csv')
+rows = [[line.rstrip().split(',')[0][1:-1]] + line.rstrip().split(',')[3:] for line in file]
+if rows[0][0] == 'protein':
+    del rows[0]
+for rec in rows:
+    curs.execute('INSERT INTO ZV_protein_cosmic (UniProt, length, snps, cdf, pval, qval) VALUES (?,?,?,?,?,?)', rec)
+
+file = open('gnomad_common_protein.csv')
+rows = [[line.rstrip().split(',')[0][1:-1]] + line.rstrip().split(',')[3:] for line in file]
+if rows[0][0] == 'protein':
+    del rows[0]
+for rec in rows:
+    curs.execute('INSERT INTO ZV_protein_gnomad_common (UniProt, length, snps, cdf, pval, qval) VALUES (?,?,?,?,?,?)', rec)
+
+file = open('gnomad_rare_protein.csv')
+rows = [[line.rstrip().split(',')[0][1:-1]] + line.rstrip().split(',')[3:] for line in file]
+if rows[0][0] == 'protein':
+    del rows[0]
+for rec in rows:
+    curs.execute('INSERT INTO ZV_protein_gnomad_rare (UniProt, length, snps, cdf, pval, qval) VALUES (?,?,?,?,?,?)', rec)
+
+
+conn.commit()
+
