@@ -1,0 +1,141 @@
+##########################################################################
+# Populating database with the content of ZoomVar Region
+# http://fraternalilab.kcl.ac.uk/ZoomVar/static/downloads/regions.tar.gz
+##########################################################################
+
+from sqlite3 import connect
+
+DB_name = 'DB_JoRo_PRO'
+
+##########################################################################
+conn = connect(DB_name)
+curs = conn.cursor()
+
+
+def clean(line):
+    ''' Function to remove columns with data from mono and multi, and substitute NA with empty string (NULL)'''
+    line = line.rstrip().split(',')
+    line = [line[0][1:-1]] + line[3:6] + line[8:11] + line[13:16] + line[18:21] + line[23:26] + line[28:31]
+    for i in range(len(line)):
+        if line[i] == "NA":
+            line[i] = ''
+    return line
+
+##########################################################################
+file = open('clinvar_region.csv')
+rows = [clean(line) for line in file]
+if rows[0][0] == 'uniprot':
+    del rows[0]
+
+for rec in rows:
+    curs.execute('''INSERT INTO ZV_region_clinvar (
+                    UniProt,
+                    len_interact,
+                    len_surf,
+                    len_core,
+                    num_snp_interact,
+                    num_snp_surf,
+                    num_snp_core,
+                    enrich_interact,
+                    enrich_surf,
+                    enrich_core,
+                    cdf_interact,
+                    cdf_surf,
+                    cdf_core,
+                    pval_interact,
+                    pval_surf,
+                    pval_core,
+                    qval_core,
+                    qval_surf,
+                    qval_interact)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', rec)
+
+
+file = open('cosmic_region.csv')
+rows = [clean(line) for line in file]
+if rows[0][0] == 'uniprot':
+    del rows[0]
+
+for rec in rows:
+    curs.execute('''INSERT INTO ZV_region_cosmic (
+                    UniProt,
+                    len_interact,
+                    len_surf,
+                    len_core,
+                    num_snp_interact,
+                    num_snp_surf,
+                    num_snp_core,
+                    enrich_interact,
+                    enrich_surf,
+                    enrich_core,
+                    cdf_interact,
+                    cdf_surf,
+                    cdf_core,
+                    pval_interact,
+                    pval_surf,
+                    pval_core,
+                    qval_core,
+                    qval_surf,
+                    qval_interact)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', rec)
+
+
+file = open('gnomad_common_region.csv')
+rows = [clean(line) for line in file]
+if rows[0][0] == 'uniprot':
+    del rows[0]
+
+for rec in rows:
+    curs.execute('''INSERT INTO ZV_region_gnomad_common (
+                    UniProt,
+                    len_interact,
+                    len_surf,
+                    len_core,
+                    num_snp_interact,
+                    num_snp_surf,
+                    num_snp_core,
+                    enrich_interact,
+                    enrich_surf,
+                    enrich_core,
+                    cdf_interact,
+                    cdf_surf,
+                    cdf_core,
+                    pval_interact,
+                    pval_surf,
+                    pval_core,
+                    qval_core,
+                    qval_surf,
+                    qval_interact)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', rec)
+
+
+file = open('gnomad_rare_region.csv')
+rows = [clean(line) for line in file]
+if rows[0][0] == 'uniprot':
+    del rows[0]
+
+for rec in rows:
+    curs.execute('''INSERT INTO ZV_region_gnomad_rare (
+                    UniProt,
+                    len_interact,
+                    len_surf,
+                    len_core,
+                    num_snp_interact,
+                    num_snp_surf,
+                    num_snp_core,
+                    enrich_interact,
+                    enrich_surf,
+                    enrich_core,
+                    cdf_interact,
+                    cdf_surf,
+                    cdf_core,
+                    pval_interact,
+                    pval_surf,
+                    pval_core,
+                    qval_core,
+                    qval_surf,
+                    qval_interact)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', rec)
+
+conn.commit()
+
