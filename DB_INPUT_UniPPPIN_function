@@ -1,0 +1,42 @@
+############################################################################
+# Populating database with the content of UNIPPIN2018 files
+############################################################################
+
+from sqlite3 import connect
+
+DB_name = 'DB_JoRo_PRO'
+
+############################################################################
+conn = connect(DB_name)
+curs = conn.cursor()
+
+def UNIPPIN_import_to_DB(file_name, table_name):
+    """ Function to read .sif files, replace '\t' with ',', and save as .csv
+    Converted file is imported into relevant table in the database
+    .csv files are kept for QC purposes"""
+    
+    query = 'INSERT INTO ' + table_name + ' (UniProt_1, UniProt_2) VALUES (?,?)'
+    # Replacing '\t' with ',' and saving as .csv
+    with open(file_name) as fin, open(file_name + '.csv', 'w') as fout:
+        for line in fin:
+            fout.write(line.replace('\tppi\t',','))
+    file = open(file_name + '.csv')
+    rows = [line.rstrip().split(',') for line in file]
+    for rec in rows: 
+        curs.execute(str(query), rec)
+    conn.commit()
+
+
+
+
+UNIPPIN_import_to_DB('BioGRID_noSelfLoop.sif', 'UP_BioGRID_noSelfLoop')
+UNIPPIN_import_to_DB('BioPlex_noSelfLoop.sif', 'UP_BioPlex_noSelfLoop')
+UNIPPIN_import_to_DB('BPMS_noSelfLoop.sif', 'UP_BPMS_noSelfLoop')
+UNIPPIN_import_to_DB('DIPPPI_noSelfLoop.sif', 'UP_DIPPPI_noSelfLoop')
+UNIPPIN_import_to_DB('HeinMS_noSelfLoop.sif', 'UP_HeinMS_noSelfLoop')
+UNIPPIN_import_to_DB('HPRD_noSelfLoop.sif', 'UP_HPRD_noSelfLoop')
+UNIPPIN_import_to_DB('IntAct_noSelfLoop.sif', 'UP_IntAct_noSelfLoop')
+UNIPPIN_import_to_DB('Metazoa_noSelfLoop.sif', 'UP_Metazoa_noSelfLoop')
+UNIPPIN_import_to_DB('String_noSelfLoop.sif','UP_String_noSelfLoop')
+UNIPPIN_import_to_DB('UniPPIN_ACC_noSelfLoop.sif','UP_UniPPIN_ACC_noSelfLoop')
+UNIPPIN_import_to_DB('Y2H_noSelfLoop.sif', 'UP_Y2H_noSelfLoop')
