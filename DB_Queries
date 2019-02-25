@@ -1,0 +1,96 @@
+SELECT COUNT(*) AS 'TOTAL'
+FROM ZV_protein_clinvar
+
+UNION ALL
+
+SELECT COUNT(*) AS 'TOTAL'
+FROM ZV_protein_cosmic
+
+UNION ALL
+
+SELECT COUNT(*) AS 'TOTAL'
+FROM ZV_protein_gnomad_common
+
+UNION ALL
+
+SELECT COUNT(*) AS 'TOTAL'
+FROM ZV_protein_gnomad_rare
+_____________________________________________________________________-
+
+SELECT 
+	[ZVPClin].[UniProt] AS [Clinvar_UniProt],
+	[ZVPClin].[length] AS [Clinvar_length],
+	[ZVPClin].[snps] AS [Clinvar_snps],
+	[ZVPClin].[cdf] AS [Clinvar_cdf],
+	[ZVPClin].[pval] AS [Clinvar_pval],
+	[ZVPClin].[qval] AS [Clinvar_qval]
+
+FROM
+	ZV_protein_clinvar AS [ZVPClin];
+
+SELECT 
+	[ZVPCosm].[UniProt] AS [Cosmic_UniProt],
+	[ZVPCosm].[length] AS [Cosmic_length],
+	[ZVPCosm].[snps] AS [Cosmic_snps],
+	[ZVPCosm].[cdf] AS [Cosmic_cdf],
+	[ZVPCosm].[pval] AS [Cosmic_pval],
+	[ZVPCosm].[qval] AS [Cosmic_qval]
+
+FROM
+	ZV_protein_cosmic AS [ZVPCosm];
+
+
+SELECT 
+	[ZVPGC].[UniProt] AS [GnomadC_UniProt],
+	[ZVPGC].[length] AS [GnomadC_length],
+	[ZVPGC].[snps] AS [GnomadC_snps],
+	[ZVPGC].[cdf] AS [GnomadC_cdf],
+	[ZVPGC].[pval] AS [GnomadC_pval],
+	[ZVPGC].[qval] AS [GnomadC_qval]
+
+FROM
+	ZV_protein_gnomad_common AS [ZVPGC];
+
+SELECT 
+	[ZVPGR].[UniProt] AS [GnomadR_UniProt],
+	[ZVPGR].[length] AS [GnomadR_length],
+	[ZVPGR].[snps] AS [GnomadR_snps],
+	[ZVPGR].[cdf] AS [GnomadR_cdf],
+	[ZVPGR].[pval] AS [GnomadR_pval],
+	[ZVPGR].[qval] AS [GnomadR_qval]
+
+FROM
+	ZV_protein_gnomad_rare AS [ZVPGR];
+
+________________________________________________________________________________________
+
+SELECT 
+	[ZVPClin].[UniProt] AS [Clinvar_UniProt],
+	[ZVPClin].[length] AS [Clinvar_length],
+	[ZVPClin].[snps] AS [Clinvar_snps],
+	[ZVPClin].[cdf] AS [Clinvar_cdf],
+	[ZVPClin].[pval] AS [Clinvar_pval],
+	[ZVPClin].[qval] AS [Clinvar_qval],
+	
+	[ZVPCosm].[snps] AS [Cosmic_snps],
+	[ZVPCosm].[cdf] AS [Cosmic_cdf],
+	[ZVPCosm].[pval] AS [Cosmic_pval],
+	[ZVPCosm].[qval] AS [Cosmic_qval],
+
+	[ZVPGC].[snps] AS [GnomadC_snps],
+	[ZVPGC].[cdf] AS [GnomadC_cdf],
+	[ZVPGC].[pval] AS [GnomadC_pval],
+	[ZVPGC].[qval] AS [GnomadC_qval],
+	
+	[ZVPGR].[snps] AS [GnomadR_snps],
+	[ZVPGR].[cdf] AS [GnomadR_cdf],
+	[ZVPGR].[pval] AS [GnomadR_pval],
+	[ZVPGR].[qval] AS [GnomadR_qval]	
+	
+FROM
+	ZV_protein_clinvar AS [ZVPClin]
+	LEFT JOIN ZV_protein_cosmic AS [ZVPCosm] ON [ZVPClin].[UniProt] = [ZVPCosm].[UniProt]
+	LEFT JOIN ZV_protein_gnomad_common AS [ZVPGC] ON [ZVPClin].[UniProt] = [ZVPGC].[UniProt]
+	LEFT JOIN ZV_protein_gnomad_rare AS [ZVPGR] ON [ZVPClin].[UniProt] = [ZVPGR].[UniProt]
+	
+WHERE [ZVPClin].[UniProt]='Q71UM5'
