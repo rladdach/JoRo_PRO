@@ -94,3 +94,13 @@ FROM
 	LEFT JOIN ZV_protein_gnomad_rare AS [ZVPGR] ON [ZVPClin].[UniProt] = [ZVPGR].[UniProt]
 	
 WHERE [ZVPClin].[UniProt]='Q71UM5'
+________________________________________________________________________________-
+SELECT 
+	UniProt_1,
+	UniProt_2,
+	(UniProt_1 IN (SELECT DISTINCT(UniProt) FROM CS_CELL_CYCLE WHERE UniProt <> '')) AS 'Zero_Node_Flag_UniProt_1',
+	(UniProt_2 IN (SELECT DISTINCT(UniProt) FROM CS_CELL_CYCLE WHERE UniProt <> '')) AS 'Zero_Node_Flag_UniProt_2'
+FROM UP_UniPPIN_ACC_noSelfLoop
+WHERE 
+(UniProt_1 IN (SELECT DISTINCT(UniProt) FROM CS_CELL_CYCLE WHERE UniProt <> '') OR
+UniProt_2 IN (SELECT DISTINCT(UniProt) FROM CS_CELL_CYCLE WHERE UniProt <> ''))
